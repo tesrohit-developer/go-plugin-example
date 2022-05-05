@@ -1,9 +1,10 @@
 package main
 
 import (
-	"log"
-
 	"github.com/dkiser/go-plugin-example/plugin"
+	"github.com/go-dmux/plugins"
+	"github.com/go-dmux/sideline"
+	"log"
 )
 
 func playWithGreeters() {
@@ -57,12 +58,68 @@ func playWithClubbers() {
 	}
 }
 
+func playWithSidelinePlugin() {
+	s := plugin.NewManager("sideline_plugin", "sideline-*", "./plugins/built", &plugin.CheckMessageSidelineImplPlugin{})
+	defer s.Dispose()
+
+	err := s.Init()
+
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
+	s.Launch()
+
+	p, err := s.GetInterface("em")
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
+	ch := make([]chan interface{}, 10)
+	ch[0] = make(chan interface{}, 10)
+	//p.(plugin.CheckMessageSidelineImpl).SidelineMessage(new(interface{}))
+	log.Printf("\n%s: %s plugin gives me: %s\n", s.Type, "sideline-em", p.(plugin.CheckMessageSidelineImpl).CheckMessageSideline(new(interface{})))
+	for msg := range ch[0] {
+		log.Printf("\n%s: %s plugin gives me: %s\n", s.Type, "sideline-em", p.(plugin.CheckMessageSidelineImpl).CheckMessageSideline(msg))
+	}
+}
+
+func playWithDmuxSidelinePlugin() {
+	s := plugins.NewManager("sideline_plugin", "sideline-*", "./plugins/built", &sideline.CheckMessageSidelineImplPlugin{})
+	defer s.Dispose()
+
+	err := s.Init()
+
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
+	s.Launch()
+
+	p, err := s.GetInterface("em")
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
+	ch := make([]chan interface{}, 10)
+	ch[0] = make(chan interface{}, 10)
+	//p.(plugin.CheckMessageSidelineImpl).SidelineMessage(new(interface{}))
+	log.Printf("\n%s: %s plugin gives me: %s\n", s.Type, "sideline-em", p.(sideline.CheckMessageSidelineImpl).CheckMessageSideline(new(interface{})))
+	/*for msg := range ch[0] {
+		log.Printf("\n%s: %s plugin gives me: %s\n", s.Type, "sideline-em", p.(sideline.CheckMessageSidelineImpl).CheckMessageSideline(msg))
+	}*/
+}
+
 func main() {
 
 	// excercise some greeter plugins
-	playWithGreeters()
+	//playWithGreeters()
 
 	// excercise some clubber plugins
-	playWithClubbers()
+	//playWithClubbers()
+
+	//playWithSidelinePlugin()
+
+	playWithDmuxSidelinePlugin()
 
 }
