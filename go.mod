@@ -9,7 +9,6 @@ require (
 
 require (
 	github.com/fatih/color v1.7.0 // indirect
-	github.com/go-dmux/plugins v0.0.0-00010101000000-000000000000 // indirect
 	github.com/golang/protobuf v1.3.4 // indirect
 	github.com/hashicorp/go-hclog v0.14.1 // indirect
 	github.com/hashicorp/yamux v0.0.0-20180604194846-3520598351bb // indirect

@@ -2,8 +2,7 @@ package main
 
 import (
 	"github.com/dkiser/go-plugin-example/plugin"
-	"github.com/go-dmux/plugins"
-	"github.com/go-dmux/sideline"
+	"github.com/tesrohit-developer/go-dmux/plugins"
 	"log"
 )
 
@@ -85,7 +84,7 @@ func playWithSidelinePlugin() {
 }
 
 func playWithDmuxSidelinePlugin() {
-	s := plugins.NewManager("sideline_plugin", "sideline-*", "./plugins/built", &sideline.CheckMessageSidelineImplPlugin{})
+	s := plugins.NewManager("sideline_plugin", "sideline-*", "./plugins/built", &plugins.CheckMessageSidelineImplPlugin{})
 	defer s.Dispose()
 
 	err := s.Init()
@@ -104,7 +103,7 @@ func playWithDmuxSidelinePlugin() {
 	ch := make([]chan interface{}, 10)
 	ch[0] = make(chan interface{}, 10)
 	//p.(plugin.CheckMessageSidelineImpl).SidelineMessage(new(interface{}))
-	log.Printf("\n%s: %s plugin gives me: %s\n", s.Type, "sideline-em", p.(sideline.CheckMessageSidelineImpl).CheckMessageSideline(new(interface{})))
+	log.Printf("\n%s: %s plugin gives me: %s\n", s.Type, "sideline-em", p.(plugins.CheckMessageSidelineImpl).CheckMessageSideline(new(interface{})))
 	/*for msg := range ch[0] {
 		log.Printf("\n%s: %s plugin gives me: %s\n", s.Type, "sideline-em", p.(sideline.CheckMessageSidelineImpl).CheckMessageSideline(msg))
 	}*/

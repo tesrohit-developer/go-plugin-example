@@ -1,7 +1,7 @@
 package plugin
 
 import (
-	SidelinePlugin "github.com/go-dmux/sideline"
+	plugins "github.com/tesrohit-developer/go-dmux/plugins"
 	"testing"
 )
 
@@ -33,7 +33,7 @@ func TestManagerInit(t *testing.T) {
 }
 
 func TestSidelinePluginInit(t *testing.T) {
-	manager := NewManager("sideline_plugin", "sideline-*", "../plugins/built", &SidelinePlugin.CheckMessageSidelineImplPlugin{})
+	manager := NewManager("sideline_plugin", "sideline-*", "../plugins/built", CheckMessageSidelineImplPlugin{})
 	defer manager.Dispose()
 	err := manager.Init()
 	if err != nil {
@@ -51,5 +51,5 @@ func TestSidelinePluginInit(t *testing.T) {
 		t.Fatal(err.Error())
 	}
 	b := []byte("asd")
-	t.Log(foo.(SidelinePlugin.CheckMessageSidelineImpl).CheckMessageSideline(b))
+	t.Log(foo.(plugins.CheckMessageSidelineImpl).CheckMessageSideline(b))
 }
