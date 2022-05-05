@@ -3,9 +3,8 @@ package main
 import (
 	"net/rpc"
 
-	"github.com/go-dmux/plugins"
-	"github.com/go-dmux/sideline"
 	gplugin "github.com/hashicorp/go-plugin"
+	"github.com/tesrohit-developer/go-dmux/plugins"
 )
 
 type SidelineEm struct{}
@@ -21,11 +20,11 @@ func (SidelineEm) SidelineMessage(msg interface{}) {
 type SidelineEmPlugin struct{}
 
 func (SidelineEmPlugin) Server(*gplugin.MuxBroker) (interface{}, error) {
-	return &sideline.CheckMessageSidelineRPCServer{Impl: new(SidelineEm)}, nil
+	return &plugins.CheckMessageSidelineRPCServer{Impl: new(SidelineEm)}, nil
 }
 
 func (SidelineEmPlugin) Client(b *gplugin.MuxBroker, c *rpc.Client) (interface{}, error) {
-	return &sideline.CheckMessageSidelineRPC{Client: c}, nil
+	return &plugins.CheckMessageSidelineRPC{Client: c}, nil
 }
 
 func main() {
@@ -33,8 +32,12 @@ func main() {
 	// so that the host and our plugin can verify they can talk to each other.
 	// Then we set the plugin map to say what plugins we're serving.
 	gplugin.Serve(&gplugin.ServeConfig{
-		HandshakeConfig: plugins.HandshakeConfig,
-		Plugins:         pluginMap,
+		HandshakeConfig: gplugin.HandshakeConfig{
+			ProtocolVersion:  1,
+			MagicCookieKey:   "BASIC_PLUGIN",
+			MagicCookieValue: "hello",
+		},
+		Plugins: pluginMap,
 	})
 }
 

@@ -1,13 +1,9 @@
 module github.com/dkiser/go-plugin-example
 
-go 1.12
-
-replace github.com/go-dmux/sideline => /Users/tupili.easwar/go/src/github.com/go-dmux/sideline
-
-replace github.com/go-dmux/plugins => /Users/tupili.easwar/go/src/github.com/go-dmux/plugins
+go 1.17
 
 require (
-	github.com/go-dmux/sideline v0.0.0-00010101000000-000000000000
+	github.com/tesrohit-developer/go-dmux latest
 	github.com/hashicorp/go-plugin v1.4.3
 )
 
