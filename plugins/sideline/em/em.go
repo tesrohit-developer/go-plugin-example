@@ -1,4 +1,4 @@
-package main
+package pluginst
 
 import (
 	"net/rpc"
