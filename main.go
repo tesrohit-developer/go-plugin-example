@@ -72,7 +72,7 @@ func playWithDubbers() {
 	dubbers.Launch()
 
 	// Lets see what all the clubbers do when they party hardy!
-	for _, pluginName := range []string{"raver", "milkboy"} {
+	for _, pluginName := range []string{"milkboy"} {
 		// grab a plugin by its string id
 		p, err := dubbers.GetInterface(pluginName)
 		if err != nil {
