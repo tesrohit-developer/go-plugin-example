@@ -1,6 +1,6 @@
 GREETER_PLUGIN_DIRS=$(wildcard ./plugins/greeter/*)
 CLUBBER_PLUGIN_DIRS=$(wildcard ./plugins/clubber/*)
-DUBBER_PLUGIN_DIRS=$(wildcard ./plugins/clubber/*)
+DUBBER_PLUGIN_DIRS=$(wildcard ./plugins/dubber/*)
 #SIDELINE_PLUGIN_DIRS=$(wildcard ./plugins/sideline/*)
 
 all: build-plugins
@@ -21,7 +21,7 @@ $(CLUBBER_PLUGIN_DIRS):
 	$(MAKE) -C $@
 
 $(DUBBER_PLUGIN_DIRS):
-	$(info Clubber plugins at: $(DUBBER_PLUGIN_DIRS))
+	$(info Dubber plugins at: $(DUBBER_PLUGIN_DIRS))
 	$(MAKE) -C $@
 
 #$(SIDELINE_PLUGIN_DIRS):
