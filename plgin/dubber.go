@@ -5,7 +5,7 @@ import gplugin "github.com/hashicorp/go-plugin"
 
 // Dubber is the interface that we're exposing as a plugin.
 type Dubber interface {
-	FistPump(s string) string
+	FistPump(s string) (string, error)
 }
 
 // Here is an implementation that talks over RPC
@@ -32,8 +32,8 @@ type DubberRPCServer struct {
 	Impl Dubber
 }
 
-func (s *DubberRPCServer) FistPump(st string, resp *string) error {
-	*resp = s.Impl.FistPump(st)
+func (s *DubberRPCServer) FistPump(st string, resp *string, err *error) error {
+	*resp, *err = s.Impl.FistPump(st)
 	return nil
 }
 
