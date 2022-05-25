@@ -1,5 +1,6 @@
 GREETER_PLUGIN_DIRS=$(wildcard ./plugins/greeter/*)
 CLUBBER_PLUGIN_DIRS=$(wildcard ./plugins/clubber/*)
+DUBBER_PLUGIN_DIRS=$(wildcard ./plugins/clubber/*)
 #SIDELINE_PLUGIN_DIRS=$(wildcard ./plugins/sideline/*)
 
 all: build-plugins

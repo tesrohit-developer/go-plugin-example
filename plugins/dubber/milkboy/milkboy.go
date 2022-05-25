@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/dkiser/go-plugin-example/plgin"
 	"net/rpc"
 
 	plugin "github.com/dkiser/go-plugin-example/plugin"
@@ -16,29 +17,29 @@ var fist = `
 '.__________'-_______-'
 `
 
-// Here is a real implementation of Clubber
-type ClubberCowboy struct{}
+// Here is a real implementation of Dubber
+type DubberMilkboy struct{}
 
-func (ClubberCowboy) FistPump() string { return fist }
+func (DubberMilkboy) FistPump() string { return fist }
 
 // This is the implementation of plugin.Plugin so we can serve/consume this
 //
 // This has two methods: Server must return an RPC server for this plugin
-// type. We construct a ClubberRPCServer for this.
+// type. We construct a DubberRPCServer for this.
 //
 // Client must return an implementation of our interface that communicates
-// over an RPC client. We return ClubberRPC for this.
+// over an RPC client. We return DubberRPC for this.
 //
 // Ignore MuxBroker. That is used to create more multiplexed streams on our
 // plugin connection and is a more advanced use case.
-type ClubberPlugin struct{}
+type DubberPlugin struct{}
 
-func (ClubberPlugin) Server(*gplugin.MuxBroker) (interface{}, error) {
-	return &plugin.ClubberRPCServer{Impl: new(ClubberCowboy)}, nil
+func (DubberPlugin) Server(*gplugin.MuxBroker) (interface{}, error) {
+	return &plgin.DubberRPCServer{Impl: new(DubberMilkboy)}, nil
 }
 
-func (ClubberPlugin) Client(b *gplugin.MuxBroker, c *rpc.Client) (interface{}, error) {
-	return &plugin.ClubberRPC{Client: c}, nil
+func (DubberPlugin) Client(b *gplugin.MuxBroker, c *rpc.Client) (interface{}, error) {
+	return &plgin.DubberRPC{Client: c}, nil
 }
 
 func main() {
@@ -53,5 +54,5 @@ func main() {
 
 // pluginMap is the map of plugins we can dispense.
 var pluginMap = map[string]gplugin.Plugin{
-	"milkboy": new(ClubberPlugin),
+	"milkboy": new(DubberPlugin),
 }

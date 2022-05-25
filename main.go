@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/dkiser/go-plugin-example/plgin"
 	"github.com/dkiser/go-plugin-example/plugin"
 	"log"
 )
@@ -46,13 +47,38 @@ func playWithClubbers() {
 	clubbers.Launch()
 
 	// Lets see what all the clubbers do when they party hardy!
-	for _, pluginName := range []string{"raver", "cowboy"} {
+	for _, pluginName := range []string{"raver", "milkboy"} {
 		// grab a plugin by its string id
 		p, err := clubbers.GetInterface(pluginName)
 		if err != nil {
 			log.Fatal(err.Error())
 		}
 		log.Printf("\n%s: %s plugin gives me: %s\n", clubbers.Type, pluginName, p.(plugin.Clubber).FistPump())
+	}
+}
+
+func playWithDubbers() {
+	// Grab a new manager for dealing with "clubber" type plugins
+	dubbers := plugin.NewManager("dubber", "dubber-*", "./plugins/built", &plgin.DubberPlugin{})
+	defer dubbers.Dispose()
+
+	// Initialize clubbers manager
+	err := dubbers.Init()
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
+	// Launch all clubbbers binaries
+	dubbers.Launch()
+
+	// Lets see what all the clubbers do when they party hardy!
+	for _, pluginName := range []string{"raver", "milkboy"} {
+		// grab a plugin by its string id
+		p, err := dubbers.GetInterface(pluginName)
+		if err != nil {
+			log.Fatal(err.Error())
+		}
+		log.Printf("\n%s: %s plugin gives me: %s\n", dubbers.Type, pluginName, p.(plgin.Dubber).FistPump())
 	}
 }
 
@@ -114,8 +140,9 @@ func main() {
 	//playWithGreeters()
 
 	// excercise some clubber plugins
-	playWithClubbers()
+	//playWithClubbers()
 
+	playWithDubbers()
 	//playWithSidelinePlugin()
 
 	//playWithDmuxSidelinePlugin()
