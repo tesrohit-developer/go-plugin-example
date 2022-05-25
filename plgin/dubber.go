@@ -13,9 +13,9 @@ type DubberRPC struct {
 	Client *rpc.Client
 }
 
-func (g *DubberRPC) FistPump() string {
+func (g *DubberRPC) FistPump(s string) string {
 	var resp string
-	err := g.Client.Call("Plugin.FistPump", new(interface{}), &resp)
+	err := g.Client.Call("Plugin.FistPump", s, &resp)
 	if err != nil {
 		// You usually want your interfaces to return errors. If they don't,
 		// there isn't much other choice here.
