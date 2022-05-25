@@ -78,7 +78,7 @@ func playWithDubbers() {
 		if err != nil {
 			log.Fatal(err.Error())
 		}
-		log.Printf("\n%s: %s plugin gives me: %s\n", dubbers.Type, pluginName, p.(plgin.Dubber).FistPump())
+		log.Printf("\n%s: %s plugin gives me: %s\n", dubbers.Type, pluginName, p.(plgin.Dubber).FistPump("asd"))
 	}
 }
 

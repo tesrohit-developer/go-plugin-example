@@ -20,7 +20,7 @@ var fist = `
 // Here is a real implementation of Dubber
 type DubberMilkboy struct{}
 
-func (DubberMilkboy) FistPump() string { return fist }
+func (DubberMilkboy) FistPump(s string) string { return fist + s }
 
 // This is the implementation of plugin.Plugin so we can serve/consume this
 //
