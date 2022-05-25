@@ -3,7 +3,6 @@ module github.com/dkiser/go-plugin-example
 go 1.17
 
 require (
-	github.com/tesrohit-developer/go-dmux latest
 	github.com/hashicorp/go-plugin v1.4.3
 )
 

@@ -1,6 +1,6 @@
 package main
 
-import (
+/*import (
 	"net/rpc"
 
 	gplugin "github.com/hashicorp/go-plugin"
@@ -45,3 +45,4 @@ func main() {
 var pluginMap = map[string]gplugin.Plugin{
 	"em": new(SidelineEmPlugin),
 }
+*/

@@ -2,7 +2,6 @@ package main
 
 import (
 	"github.com/dkiser/go-plugin-example/plugin"
-	"github.com/tesrohit-developer/go-dmux/plugins"
 	"log"
 )
 
@@ -83,7 +82,7 @@ func playWithSidelinePlugin() {
 	}
 }
 
-func playWithDmuxSidelinePlugin() {
+/*func playWithDmuxSidelinePlugin() {
 	s := plugins.NewManager("sideline_plugin", "sideline-*", "./plugins/built", &plugins.CheckMessageSidelineImplPlugin{})
 	defer s.Dispose()
 
@@ -106,8 +105,8 @@ func playWithDmuxSidelinePlugin() {
 	log.Printf("\n%s: %s plugin gives me: %s\n", s.Type, "sideline-em", p.(plugins.CheckMessageSidelineImpl).CheckMessageSideline(new(interface{})))
 	/*for msg := range ch[0] {
 		log.Printf("\n%s: %s plugin gives me: %s\n", s.Type, "sideline-em", p.(sideline.CheckMessageSidelineImpl).CheckMessageSideline(msg))
-	}*/
-}
+	}
+}*/
 
 func main() {
 
@@ -115,10 +114,10 @@ func main() {
 	//playWithGreeters()
 
 	// excercise some clubber plugins
-	//playWithClubbers()
+	playWithClubbers()
 
 	//playWithSidelinePlugin()
 
-	playWithDmuxSidelinePlugin()
+	//playWithDmuxSidelinePlugin()
 
 }
