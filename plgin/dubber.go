@@ -32,8 +32,8 @@ type DubberRPCServer struct {
 	Impl Dubber
 }
 
-func (s *DubberRPCServer) FistPump(st string, resp *string, err *error) error {
-	*resp, *err = s.Impl.FistPump(st)
+func (s *DubberRPCServer) FistPump(st string, resp *string) error {
+	*resp, _ = s.Impl.FistPump(st)
 	return nil
 }
 
