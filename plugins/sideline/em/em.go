@@ -1,30 +1,31 @@
 package main
 
-/*import (
+import (
+	"github.com/dkiser/go-plugin-example/plugin"
 	"net/rpc"
 
 	gplugin "github.com/hashicorp/go-plugin"
-	"github.com/tesrohit-developer/go-dmux/plugins"
 )
 
 type SidelineEm struct{}
 
-func (SidelineEm) CheckMessageSideline(byte interface{}) bool {
-	return true
+func (SidelineEm) CheckMessageSideline(byte interface{}) (bool, error) {
+	return true, nil
 }
 
-func (SidelineEm) SidelineMessage(msg interface{}) {
+func (SidelineEm) SidelineMessage(msg interface{}) error {
 	// do nothing
+	return nil
 }
 
 type SidelineEmPlugin struct{}
 
 func (SidelineEmPlugin) Server(*gplugin.MuxBroker) (interface{}, error) {
-	return &plugins.CheckMessageSidelineRPCServer{Impl: new(SidelineEm)}, nil
+	return &plugin.CheckMessageSidelineRPCServer{Impl: new(SidelineEm)}, nil
 }
 
 func (SidelineEmPlugin) Client(b *gplugin.MuxBroker, c *rpc.Client) (interface{}, error) {
-	return &plugins.CheckMessageSidelineRPC{Client: c}, nil
+	return &plugin.CheckMessageSidelineRPC{Client: c}, nil
 }
 
 func main() {
@@ -45,4 +46,3 @@ func main() {
 var pluginMap = map[string]gplugin.Plugin{
 	"em": new(SidelineEmPlugin),
 }
-*/

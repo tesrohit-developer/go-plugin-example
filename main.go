@@ -102,11 +102,11 @@ func playWithSidelinePlugin() {
 
 	ch := make([]chan interface{}, 10)
 	ch[0] = make(chan interface{}, 10)
-	//p.(plugin.CheckMessageSidelineImpl).SidelineMessage(new(interface{}))
-	log.Printf("\n%s: %s plugin gives me: %s\n", s.Type, "sideline-em", p.(plugin.CheckMessageSidelineImpl).CheckMessageSideline(new(interface{})))
-	for msg := range ch[0] {
-		log.Printf("\n%s: %s plugin gives me: %s\n", s.Type, "sideline-em", p.(plugin.CheckMessageSidelineImpl).CheckMessageSideline(msg))
-	}
+	res, _ := p.(plugin.CheckMessageSidelineImpl).CheckMessageSideline(new(interface{}))
+	log.Printf("\n%s: %s plugin gives me: %s\n", s.Type, "sideline-em", res)
+	/*for msg := range ch[0] {
+		log.Printf("\n%s: %s plugin gives me: %s\n", s.Type, "sideline-em", res)
+	}*/
 }
 
 /*func playWithDmuxSidelinePlugin() {
@@ -143,8 +143,8 @@ func main() {
 	// excercise some clubber plugins
 	//playWithClubbers()
 
-	playWithDubbers()
-	//playWithSidelinePlugin()
+	//playWithDubbers()
+	playWithSidelinePlugin()
 
 	//playWithDmuxSidelinePlugin()
 
