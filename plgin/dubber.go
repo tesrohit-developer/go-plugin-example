@@ -33,6 +33,7 @@ type DubberRPCServer struct {
 }
 
 func (s *DubberRPCServer) FistPump(st string, resp *string) error {
+	var err error
 	*resp, err = s.Impl.FistPump(st)
 	return err
 }
