@@ -32,9 +32,9 @@ type DubberRPCServer struct {
 	Impl Dubber
 }
 
-func (s *DubberRPCServer) FistPump(st string, resp *string) (string, error) {
+func (s *DubberRPCServer) FistPump(st string, resp *string) string {
 	*resp, _ = s.Impl.FistPump(st)
-	return *resp, nil
+	return *resp
 }
 
 // Dummy implementation of a plugin.Plugin interface for use in PluginMap.
