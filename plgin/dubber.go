@@ -13,7 +13,7 @@ type DubberRPC struct {
 	Client *rpc.Client
 }
 
-func (g *DubberRPC) FistPump(s string) string {
+func (g *DubberRPC) FistPump(s string) (string, error) {
 	var resp string
 	err := g.Client.Call("Plugin.FistPump", s, &resp)
 	if err != nil {
@@ -22,7 +22,7 @@ func (g *DubberRPC) FistPump(s string) string {
 		panic(err)
 	}
 
-	return resp
+	return resp, err
 }
 
 // Here is the RPC server that DubberRPC talks to, conforming to
