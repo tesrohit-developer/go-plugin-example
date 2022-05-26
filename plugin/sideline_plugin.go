@@ -54,10 +54,10 @@ func (s *CheckMessageSidelineRPCServer) CheckMessageSideline(key interface{}, re
 	return err
 }
 
-func (s *CheckMessageSidelineRPCServer) SidelineMessage(args interface{}) error {
-	var err error
-	err = s.Impl.SidelineMessage(args)
-	return err
+func (s *CheckMessageSidelineRPCServer) SidelineMessage(args interface{}, err *error) error {
+	//var err error
+	*err = s.Impl.SidelineMessage(args)
+	return *err
 }
 
 // Dummy implementation of a plugin.Plugin interface for use in PluginMap.
