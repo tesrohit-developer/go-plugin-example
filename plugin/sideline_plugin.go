@@ -21,7 +21,7 @@ func (g *CheckMessageSidelineRPC) CheckMessageSideline(key interface{}) (bool, e
 	var resp bool
 	fmt.Println("Checking from dmux plugin")
 	fmt.Println("Calling plugin ")
-	err := g.Client.Call("Plugins.CheckMessageSideline", key, &resp)
+	err := g.Client.Call("Plugin.CheckMessageSidelin", key, &resp)
 	if err != nil {
 		// You usually want your interfaces to return errors. If they don't,
 		// there isn't much other choice here.
