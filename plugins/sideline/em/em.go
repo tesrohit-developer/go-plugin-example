@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/dkiser/go-plugin-example/plugin"
 	"net/rpc"
 
@@ -10,11 +11,13 @@ import (
 type SidelineEm struct{}
 
 func (SidelineEm) CheckMessageSideline(byte interface{}) (bool, error) {
+	fmt.Println("Checking message")
 	return true, nil
 }
 
 func (SidelineEm) SidelineMessage(msg interface{}) error {
 	// do nothing
+	fmt.Println("Sidelining message")
 	return nil
 }
 
