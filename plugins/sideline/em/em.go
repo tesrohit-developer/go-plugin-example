@@ -11,13 +11,13 @@ import (
 type SidelineEm struct{}
 
 func (SidelineEm) CheckMessageSideline(byte interface{}) (bool, error) {
-	fmt.Println("Checking message")
+	fmt.Println("Checking message in EM")
 	return true, nil
 }
 
 func (SidelineEm) SidelineMessage(msg interface{}) error {
 	// do nothing
-	fmt.Println("Sidelining message")
+	fmt.Println("Sidelining message in EM")
 	return nil
 }
 
