@@ -1,6 +1,6 @@
 module github.com/dkiser/go-plugin-example
 
-go 1.17
+go 1.12
 
 require (
 	github.com/hashicorp/go-plugin v1.4.3
