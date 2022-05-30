@@ -78,7 +78,7 @@ func (SidelineEm) CheckMessageSideline(byte interface{}) (bool, error) {
 	headers["X-IDEMPOTENCY-ID"] = time.Now().String()
 	headers["X-CLIENT-ID"] = "go-dmux"
 	headers["X-PERF-TTL"] = "LONG_PERF"
-	responseBoolean, responseCode := execute("POST", nil, headers, nil)
+	responseBoolean, responseCode := execute("POST", "", headers, nil)
 	fmt.Println(responseCode)
 	return responseBoolean, nil
 }
