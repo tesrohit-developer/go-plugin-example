@@ -72,7 +72,7 @@ func execute(method, url string, headers map[string]string,
 
 func (SidelineEm) CheckMessageSideline(byte interface{}) (bool, error) {
 	fmt.Println("Checking message in EM")
-	url := "http://10.47.101.183/entity-manager/v1/entity/upsert"
+	url := "http://10.47.101.183/entity-manager/v1/entity/read"
 	headers := make(map[string]string)
 	headers["Content-Type"] = "application/octet-stream"
 	headers["X-IDEMPOTENCY-ID"] = time.Now().String()
