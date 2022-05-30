@@ -104,6 +104,8 @@ func playWithSidelinePlugin() {
 	ch[0] = make(chan interface{}, 10)
 	res, _ := p.(plugin.CheckMessageSidelineImpl).CheckMessageSideline(new(interface{}))
 	log.Printf("\n%s: %s plugin gives me: %s\n", s.Type, "sideline-em", res)
+	p.(plugin.CheckMessageSidelineImpl).CheckMessageSideline(new(interface{}))
+	p.(plugin.CheckMessageSidelineImpl).CheckMessageSideline(new(interface{}))
 	/*for msg := range ch[0] {
 		log.Printf("\n%s: %s plugin gives me: %s\n", s.Type, "sideline-em", res)
 	}*/
