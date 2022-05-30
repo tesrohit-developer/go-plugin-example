@@ -83,7 +83,7 @@ func playWithDubbers() {
 	}
 }
 
-func playWithSidelinePlugin() {
+func getSidelinePlugin() interface{} {
 	s := plugin.NewManager("sideline_plugin", "sideline-*", "./plugins/built", &plugin.CheckMessageSidelineImplPlugin{})
 	defer s.Dispose()
 
@@ -99,11 +99,29 @@ func playWithSidelinePlugin() {
 	if err != nil {
 		log.Fatal(err.Error())
 	}
+	return p
+}
 
-	ch := make([]chan interface{}, 10)
-	ch[0] = make(chan interface{}, 10)
-	res, _ := p.(plugin.CheckMessageSidelineImpl).CheckMessageSideline(new(interface{}))
-	log.Printf("\n%s: %s plugin gives me: %s\n", s.Type, "sideline-em", res)
+func playWithSidelinePlugin() {
+	/*s := plugin.NewManager("sideline_plugin", "sideline-*", "./plugins/built", &plugin.CheckMessageSidelineImplPlugin{})
+	defer s.Dispose()
+
+	err := s.Init()
+
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
+	s.Launch()
+
+	p, err := s.GetInterface("em")
+	if err != nil {
+		log.Fatal(err.Error())
+	}*/
+	p := getSidelinePlugin()
+	//res, _ := p.(plugin.CheckMessageSidelineImpl).CheckMessageSideline(new(interface{}))
+	p.(plugin.CheckMessageSidelineImpl).CheckMessageSideline(new(interface{}))
+	//log.Printf("\n%s: %s plugin gives me: %s\n", s.Type, "sideline-em", res)
 	p.(plugin.CheckMessageSidelineImpl).CheckMessageSideline(new(interface{}))
 	p.(plugin.CheckMessageSidelineImpl).CheckMessageSideline(new(interface{}))
 	/*for msg := range ch[0] {
