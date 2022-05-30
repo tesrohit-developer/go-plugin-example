@@ -72,13 +72,13 @@ func execute(method, url string, headers map[string]string,
 
 func (SidelineEm) CheckMessageSideline(byte interface{}) (bool, error) {
 	fmt.Println("Checking message in EM")
-	//url := "http://10.47.101.183/entity-manager/v1/entity/read"
+	url := "http://10.47.101.183/entity-manager/v1/entity/read"
 	headers := make(map[string]string)
 	headers["Content-Type"] = "application/octet-stream"
 	headers["X-IDEMPOTENCY-ID"] = time.Now().String()
 	headers["X-CLIENT-ID"] = "go-dmux"
 	headers["X-PERF-TTL"] = "LONG_PERF"
-	responseBoolean, responseCode := execute("POST", "", headers, nil)
+	responseBoolean, responseCode := execute("POST", url, headers, nil)
 	fmt.Println(responseCode)
 	return responseBoolean, nil
 }
