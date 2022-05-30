@@ -85,7 +85,7 @@ func playWithDubbers() {
 
 func getSidelinePlugin() interface{} {
 	s := plugin.NewManager("sideline_plugin", "sideline-*", "./plugins/built", &plugin.CheckMessageSidelineImplPlugin{})
-	defer s.Dispose()
+	//defer s.Dispose()
 
 	err := s.Init()
 
