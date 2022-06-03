@@ -121,10 +121,10 @@ func playWithSidelinePlugin() {
 	p := getSidelinePlugin()
 	//res, _ := p.(plugin.CheckMessageSidelineImpl).CheckMessageSideline(new(interface{}))
 	s1 := "em1"
-	p.(plugin.CheckMessageSidelineImpl).CheckMessageSideline(&s1)
+	p.(plugin.CheckMessageSidelineImpl).CheckMessageSideline(s1)
 	//log.Printf("\n%s: %s plugin gives me: %s\n", s.Type, "sideline-em", res)
-	p.(plugin.CheckMessageSidelineImpl).CheckMessageSideline(&s1)
-	p.(plugin.CheckMessageSidelineImpl).CheckMessageSideline(&s1)
+	p.(plugin.CheckMessageSidelineImpl).CheckMessageSideline(s1)
+	p.(plugin.CheckMessageSidelineImpl).CheckMessageSideline(s1)
 	/*for msg := range ch[0] {
 		log.Printf("\n%s: %s plugin gives me: %s\n", s.Type, "sideline-em", res)
 	}*/
