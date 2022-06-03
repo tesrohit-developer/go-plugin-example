@@ -4,6 +4,10 @@ go 1.12
 
 require github.com/hashicorp/go-plugin v1.4.3
 
+replace (
+	github.com/dkiser/go-plugin-example/plugin => ../../../plugin
+)
+
 require (
 	github.fkinternal.com/Flipkart/entity-manager/modules/entity-manager-client-model/EntityManagerClientModel v0.0.0-20220519064722-e71b578ce0ad
 	github.fkinternal.com/Flipkart/entity-manager/modules/entity-manager-model/EntityManagerModel v0.0.0-20220519064722-e71b578ce0ad
