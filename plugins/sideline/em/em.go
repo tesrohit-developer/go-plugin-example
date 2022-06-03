@@ -78,6 +78,7 @@ func execute(method, url string, headers map[string]string,
 	if emclientmodels.ResponseStatus_STATUS_SUCCESS.Number() == readResponse.ResponseMeta.ResponseStatus.Number() {
 		return true, response.StatusCode, readResponse.ResponseMeta.ResponseCode, ""
 	}
+	fmt.Println(readResponse.String())
 	return false, response.StatusCode, readResponse.ResponseMeta.ResponseCode, readResponse.String()
 }
 
