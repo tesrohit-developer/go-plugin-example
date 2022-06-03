@@ -114,7 +114,7 @@ func (SidelineEm) CheckMessageSideline(byte string) (bool, error) {
 			return true, nil
 		}*/
 		fmt.Println("error in reading Sideline Table")
-		errStr := "error in reading Sideline Table, ResponseCode: " + string(responseCode) +
+		errStr := "error in reading Sideline Table, ResponseCode: " + strconv.Itoa(responseCode) +
 			" EmResponseCode: " + emResponseCode.String() +
 			" ResponseBoolean: " + strconv.FormatBool(responseBoolean) +
 			" ReadResponseString: " + readResponseString
