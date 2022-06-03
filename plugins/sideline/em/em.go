@@ -74,11 +74,13 @@ func execute(method, url string, headers map[string]string,
 	var readResponse emclientmodels.ReadEntityResponse
 	proto.Unmarshal(responseBytes, &readResponse)
 	io.Copy(ioutil.Discard, response.Body)
-	//defer response.Body.Close()
+	responseStatusCode := response.StatusCode
+	emReadResponseCode := readResponse.ResponseMeta.ResponseCode
+	defer response.Body.Close()
 	if emclientmodels.ResponseStatus_STATUS_SUCCESS.Number() == readResponse.ResponseMeta.ResponseStatus.Number() {
-		return true, response.StatusCode, readResponse.ResponseMeta.ResponseCode, readResponse.String()
+		return true, responseStatusCode, emReadResponseCode, readResponse.String()
 	}
-	return false, response.StatusCode, readResponse.ResponseMeta.ResponseCode, readResponse.String()
+	return false, responseStatusCode, emReadResponseCode, readResponse.String()
 }
 
 func (SidelineEm) CheckMessageSideline(byte string) (bool, error) {
