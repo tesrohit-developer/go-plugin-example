@@ -11,5 +11,4 @@ require (
 	golang.org/x/tools v0.0.0-20190524140312-2c0ae7006135 // indirect
 	google.golang.org/protobuf v1.28.0
 	honnef.co/go/tools v0.0.0-20190523083050-ea95bdfd59fc // indirect
-	github.com/dkiser/go-plugin-example/plugin v0.0.0-20170205011010-bead7e2bd676 // indirect
 )
