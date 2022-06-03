@@ -8,7 +8,7 @@ import (
 
 // CheckMessageSidelineImpl is the interface that we're exposing as a plugin.
 type CheckMessageSidelineImpl interface {
-	CheckMessageSideline(key interface{}) (bool, error)
+	CheckMessageSideline(key string) (bool, error)
 	SidelineMessage(KafkaSidelineMessage interface{}) error
 }
 
@@ -17,7 +17,7 @@ type CheckMessageSidelineRPC struct {
 	Client *rpc.Client
 }
 
-func (g *CheckMessageSidelineRPC) CheckMessageSideline(key interface{}) (bool, error) {
+func (g *CheckMessageSidelineRPC) CheckMessageSideline(key string) (bool, error) {
 	var resp bool
 	fmt.Println("Checking from dmux plugin")
 	fmt.Println("Calling plugin ")
@@ -49,7 +49,7 @@ type CheckMessageSidelineRPCServer struct {
 	Impl CheckMessageSidelineImpl
 }
 
-func (s *CheckMessageSidelineRPCServer) CheckMessageSideline(key interface{}, resp *bool) error {
+func (s *CheckMessageSidelineRPCServer) CheckMessageSideline(key string, resp *bool) error {
 	var err error
 	*resp, err = s.Impl.CheckMessageSideline(key)
 	return err
