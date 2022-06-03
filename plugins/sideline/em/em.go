@@ -81,7 +81,7 @@ func execute(method, url string, headers map[string]string,
 	return false, response.StatusCode, readResponse.ResponseMeta.ResponseCode, readResponse.String()
 }
 
-func (SidelineEm) CheckMessageSideline(byte interface{}) (bool, error) {
+func (SidelineEm) CheckMessageSideline(byte string) (bool, error) {
 	fmt.Println("Checking message in EM")
 	url := "http://10.24.19.136/entity-manager/v1/entity/read"
 	headers := make(map[string]string)
