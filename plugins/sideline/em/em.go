@@ -111,10 +111,10 @@ func (SidelineEm) CheckMessageSideline(byte string) (bool, error) {
 	}
 	responseBoolean, responseCode, emResponseCode, readResponseString := execute("POST", url, headers, bytes.NewReader(b))
 	if !responseBoolean {
-		/*if emclientmodels.ResponseCode_ENTITY_NOT_FOUND.Number() == emResponseCode.Number() {
+		if emclientmodels.ResponseCode_ENTITY_NOT_FOUND.Number() == emResponseCode.Number() {
 			fmt.Println("Not sidelined message ")
 			return true, nil
-		}*/
+		}
 		fmt.Println("error in reading Sideline Table")
 		errStr := "error in reading Sideline Table, ResponseCode: " + strconv.Itoa(responseCode) +
 			" EmResponseCode: " + emResponseCode.String() +
