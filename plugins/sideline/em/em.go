@@ -73,7 +73,7 @@ func execute(method, url string, headers map[string]string,
 	responseBytes, _ := ioutil.ReadAll(response.Body)
 	var readResponse emclientmodels.ReadEntityResponse
 	proto.Unmarshal(responseBytes, &readResponse)
-	//io.Copy(ioutil.Discard, response.Body)
+	io.Copy(ioutil.Discard, response.Body)
 	//defer response.Body.Close()
 	if emclientmodels.ResponseStatus_STATUS_SUCCESS.Number() == readResponse.ResponseMeta.ResponseStatus.Number() {
 		return true, response.StatusCode, readResponse.ResponseMeta.ResponseCode, readResponse.String()
