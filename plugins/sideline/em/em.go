@@ -70,15 +70,14 @@ func execute(method, url string, headers map[string]string,
 		return false, 2, -1, ""
 	}
 	//TODO check if this can be avoided
-	io.Copy(ioutil.Discard, response.Body)
 	responseBytes, _ := ioutil.ReadAll(response.Body)
 	var readResponse emclientmodels.ReadEntityResponse
 	proto.Unmarshal(responseBytes, &readResponse)
-	defer response.Body.Close()
+	//io.Copy(ioutil.Discard, response.Body)
+	//defer response.Body.Close()
 	if emclientmodels.ResponseStatus_STATUS_SUCCESS.Number() == readResponse.ResponseMeta.ResponseStatus.Number() {
 		return true, response.StatusCode, readResponse.ResponseMeta.ResponseCode, readResponse.String()
 	}
-	fmt.Println(readResponse.String())
 	return false, response.StatusCode, readResponse.ResponseMeta.ResponseCode, readResponse.String()
 }
 
