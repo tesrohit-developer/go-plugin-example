@@ -109,11 +109,11 @@ func (SidelineEm) CheckMessageSideline(byte string) (bool, error) {
 		return false, errors.New("error in ser ReadEntityRequest")
 	}
 	responseBoolean, responseCode, emResponseCode, readResponseString := execute("POST", url, headers, bytes.NewReader(b))
-	if responseCode < 300 {
+	if responseCode < 100 {
 		fmt.Println("Success ")
 		return true, nil
 	}
-	
+
 	if !responseBoolean {
 		if emclientmodels.ResponseCode_ENTITY_NOT_FOUND.Number() == emResponseCode.Number() {
 			fmt.Println("Not sidelined message ")
