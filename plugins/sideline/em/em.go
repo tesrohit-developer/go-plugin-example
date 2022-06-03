@@ -1,6 +1,8 @@
 package main
 
 import (
+	"bytes"
+	"errors"
 	"fmt"
 	"github.com/dkiser/go-plugin-example/plugin"
 	"io"
@@ -9,15 +11,19 @@ import (
 	"net"
 	"net/http"
 	"net/rpc"
+	"strconv"
 	"time"
 
 	gplugin "github.com/hashicorp/go-plugin"
+	emclientmodels "github.fkinternal.com/Flipkart/entity-manager/modules/entity-manager-client-model/EntityManagerClientModel"
+	emmodels "github.fkinternal.com/Flipkart/entity-manager/modules/entity-manager-model/EntityManagerModel"
+	"google.golang.org/protobuf/proto"
 )
 
 type SidelineEm struct{}
 
 func execute(method, url string, headers map[string]string,
-	payload io.Reader) (bool, int) {
+	payload io.Reader) (bool, int, emclientmodels.ResponseCode, string) {
 	client := &http.Client{
 		Transport: &http.Transport{
 			DialContext: (&net.Dialer{
@@ -45,7 +51,7 @@ func execute(method, url string, headers map[string]string,
 	request, err := http.NewRequest(method, url, payload)
 	if err != nil {
 		log.Printf("failed in request build %s %s \n", url, err.Error())
-		return false, 0
+		return false, 1, -1, ""
 	}
 
 	//set headers
@@ -61,26 +67,64 @@ func execute(method, url string, headers map[string]string,
 	response, err := client.Do(request)
 	if err != nil {
 		log.Printf("failed in http call invoke %s %s \n", url, err.Error())
-		return false, 0
+		return false, 2, -1, ""
 	}
 	//TODO check if this can be avoided
 	io.Copy(ioutil.Discard, response.Body)
+	responseBytes, _ := ioutil.ReadAll(response.Body)
+	var readResponse emclientmodels.ReadEntityResponse
+	proto.Unmarshal(responseBytes, &readResponse)
 	defer response.Body.Close()
-
-	return true, response.StatusCode
+	if emclientmodels.ResponseStatus_STATUS_SUCCESS.Number() == readResponse.ResponseMeta.ResponseStatus.Number() {
+		return true, response.StatusCode, readResponse.ResponseMeta.ResponseCode, ""
+	}
+	return false, response.StatusCode, readResponse.ResponseMeta.ResponseCode, readResponse.String()
 }
 
 func (SidelineEm) CheckMessageSideline(byte interface{}) (bool, error) {
 	fmt.Println("Checking message in EM")
-	url := "http://10.47.101.183/entity-manager/v1/entity/read"
+	url := "http://10.24.19.136/entity-manager/v1/entity/read"
 	headers := make(map[string]string)
 	headers["Content-Type"] = "application/octet-stream"
 	headers["X-IDEMPOTENCY-ID"] = time.Now().String()
 	headers["X-CLIENT-ID"] = "go-dmux"
 	//headers["X-PERF-TTL"] = "LONG_PERF"
-	responseBoolean, responseCode := execute("POST", url, headers, nil)
-	fmt.Println(responseCode)
-	return responseBoolean, nil
+	entityIdentifier := emmodels.EntityIdentifier{
+		Namespace: "com.dmux",
+		Name:      "SidelineMessage",
+	}
+	tenantIdentifier := emmodels.TenantIdentifier{
+		Name: "OMSDMUX",
+	}
+	readEntityRequest := emclientmodels.ReadEntityRequest{
+		EntityIdentifier: &entityIdentifier,
+		TenantIdentifier: &tenantIdentifier,
+		EntityId:         "OD39848785211959690",
+		FieldsToRead:     nil,
+	}
+	b, e := proto.Marshal(&readEntityRequest)
+	if e != nil {
+		fmt.Println("error in ser ReadEntityRequest")
+		return false, errors.New("error in ser ReadEntityRequest")
+	}
+	responseBoolean, responseCode, emResponseCode, readResponseString := execute("POST", url, headers, bytes.NewReader(b))
+	if !responseBoolean {
+		if emclientmodels.ResponseCode_ENTITY_NOT_FOUND.Number() == emResponseCode.Number() {
+			fmt.Println("Not sidelined message ")
+			return true, nil
+		}
+		fmt.Println("error in reading Sideline Table")
+		errStr := "error in reading Sideline Table, ResponseCode: " + strconv.Itoa(responseCode) +
+			" EmResponseCode: " + emResponseCode.String() +
+			" ResponseBoolean: " + strconv.FormatBool(responseBoolean) +
+			" ReadResponseString: " + readResponseString
+		return false, errors.New(errStr)
+	}
+	if responseCode < 300 {
+		fmt.Println("Success ")
+		return true, nil
+	}
+	return false, errors.New("error in reading Sideline Table")
 }
 
 func (SidelineEm) SidelineMessage(msg interface{}) error {

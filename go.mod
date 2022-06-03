@@ -20,4 +20,6 @@ require (
 	golang.org/x/text v0.3.0 // indirect
 	google.golang.org/genproto v0.0.0-20190819201941-24fa4b261c55 // indirect
 	google.golang.org/grpc v1.27.1 // indirect
+	github.fkinternal.com/Flipkart/entity-manager/modules/entity-manager-client-model/EntityManagerClientModel v0.0.0-20220519064722-e71b578ce0ad
+    github.fkinternal.com/Flipkart/entity-manager/modules/entity-manager-model/EntityManagerModel v0.0.0-20220519064722-e71b578ce0ad
 )
