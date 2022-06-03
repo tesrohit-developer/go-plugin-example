@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"github.com/tesrohit-developer/go-plugin-example/plugin"
+	"github.com/dkiser/go-plugin-example/plugin"
 	"io"
 	"io/ioutil"
 	"log"
