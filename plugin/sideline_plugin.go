@@ -28,7 +28,7 @@ func (g *CheckMessageSidelineRPC) CheckMessageSideline(key string) (bool, error)
 		fmt.Println(err)
 		panic(err)
 	}
-
+	fmt.Println("No error")
 	return resp, nil
 }
 
