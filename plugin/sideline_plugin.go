@@ -25,6 +25,7 @@ func (g *CheckMessageSidelineRPC) CheckMessageSideline(key string) (bool, error)
 	if err != nil {
 		// You usually want your interfaces to return errors. If they don't,
 		// there isn't much other choice here.
+		fmt.Println(err)
 		panic(err)
 	}
 
