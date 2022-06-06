@@ -22,8 +22,7 @@ import (
 
 type SidelineEm struct{}
 
-func execute(method, url string, headers map[string]string,
-	payload io.Reader) (bool, int, emclientmodels.ResponseCode, string) {
+func execute(method, url string, headers map[string]string, payload io.Reader) (bool, int, emclientmodels.ResponseCode, int32, string) {
 	client := &http.Client{
 		Transport: &http.Transport{
 			DialContext: (&net.Dialer{
@@ -51,7 +50,7 @@ func execute(method, url string, headers map[string]string,
 	request, err := http.NewRequest(method, url, payload)
 	if err != nil {
 		log.Printf("failed in request build %s %s \n", url, err.Error())
-		return false, 1, -1, ""
+		return false, 1, -1, 0, ""
 	}
 
 	//set headers
@@ -67,23 +66,27 @@ func execute(method, url string, headers map[string]string,
 	response, err := client.Do(request)
 	if err != nil {
 		log.Printf("failed in http call invoke %s %s \n", url, err.Error())
-		return false, 2, -1, ""
+		return false, 2, -1, 0, ""
 	}
 	//TODO check if this can be avoided
 	responseBytes, _ := ioutil.ReadAll(response.Body)
-	var readResponse emclientmodels.ReadEntityResponse
-	proto.Unmarshal(responseBytes, &readResponse)
-	io.Copy(ioutil.Discard, response.Body)
 	responseStatusCode := response.StatusCode
+	if responseStatusCode > 300 {
+		return false, responseStatusCode, emclientmodels.ResponseCode_UNKNOWN, 0, ""
+	}
+	var readResponse emclientmodels.ReadEntityResponse
+	// readResponse.Entity
+	proto.Unmarshal(responseBytes, &readResponse)
 	emReadResponseCode := readResponse.ResponseMeta.ResponseCode
+	io.Copy(ioutil.Discard, response.Body)
 	defer response.Body.Close()
 	if emclientmodels.ResponseStatus_STATUS_SUCCESS.Number() == readResponse.ResponseMeta.ResponseStatus.Number() {
-		return true, responseStatusCode, emReadResponseCode, readResponse.String()
+		return true, responseStatusCode, emReadResponseCode, readResponse.Version, readResponse.String()
 	}
-	return false, responseStatusCode, emReadResponseCode, readResponse.String()
+	return false, responseStatusCode, emReadResponseCode, readResponse.Version, readResponse.String()
 }
 
-func (SidelineEm) CheckMessageSideline(byte string) (bool, error) {
+func (SidelineEm) CheckMessageSideline(b []byte) ([]byte, error) {
 	fmt.Println("Checking message in EM")
 	url := "http://10.24.19.136/entity-manager/v1/entity/read"
 	headers := make(map[string]string)
@@ -107,29 +110,29 @@ func (SidelineEm) CheckMessageSideline(byte string) (bool, error) {
 	b, e := proto.Marshal(&readEntityRequest)
 	if e != nil {
 		fmt.Println("error in ser ReadEntityRequest")
-		return false, errors.New("error in ser ReadEntityRequest")
+		return nil, errors.New("error in ser ReadEntityRequest")
 	}
-	responseBoolean, responseCode, emResponseCode, readResponseString := execute("POST", url, headers, bytes.NewReader(b))
+	responseBoolean, responseCode, emResponseCode, _, readResponseString := execute("POST", url, headers, bytes.NewReader(b))
 	if !responseBoolean {
-		/*if emclientmodels.ResponseCode_ENTITY_NOT_FOUND.Number() == emResponseCode.Number() {
+		if emclientmodels.ResponseCode_ENTITY_NOT_FOUND.Number() == emResponseCode.Number() {
 			fmt.Println("Not sidelined message ")
-			return true, nil
-		}*/
+			return nil, nil
+		}
 		fmt.Println("error in reading Sideline Table")
 		errStr := "error in reading Sideline Table, ResponseCode: " + strconv.Itoa(responseCode) +
 			" EmResponseCode: " + emResponseCode.String() +
 			" ResponseBoolean: " + strconv.FormatBool(responseBoolean) +
 			" ReadResponseString: " + readResponseString
-		return false, errors.New(errStr)
+		return nil, errors.New(errStr)
 	}
 	if responseCode < 300 {
 		fmt.Println("Success ")
-		return true, nil
+		return nil, nil
 	}
-	return false, errors.New("error in reading Sideline Table")
+	return nil, errors.New("error in reading Sideline Table")
 }
 
-func (SidelineEm) SidelineMessage(msg interface{}) error {
+func (SidelineEm) SidelineMessage(msg []byte) error {
 	// do nothing
 	fmt.Println("Sidelining message in EM")
 	return nil

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"github.com/dkiser/go-plugin-example/plgin"
 	"github.com/dkiser/go-plugin-example/plugin"
 	"log"
@@ -121,10 +122,11 @@ func playWithSidelinePlugin() {
 	p := getSidelinePlugin()
 	//res, _ := p.(plugin.CheckMessageSidelineImpl).CheckMessageSideline(new(interface{}))
 	s1 := "em1"
-	p.(plugin.CheckMessageSidelineImpl).CheckMessageSideline(s1)
+	s1bytes, _ := json.Marshal(s1)
+	p.(plugin.CheckMessageSidelineImpl).CheckMessageSideline(s1bytes)
 	//log.Printf("\n%s: %s plugin gives me: %s\n", s.Type, "sideline-em", res)
-	p.(plugin.CheckMessageSidelineImpl).CheckMessageSideline(s1)
-	p.(plugin.CheckMessageSidelineImpl).CheckMessageSideline(s1)
+	p.(plugin.CheckMessageSidelineImpl).CheckMessageSideline(s1bytes)
+	p.(plugin.CheckMessageSidelineImpl).CheckMessageSideline(s1bytes)
 	/*for msg := range ch[0] {
 		log.Printf("\n%s: %s plugin gives me: %s\n", s.Type, "sideline-em", res)
 	}*/

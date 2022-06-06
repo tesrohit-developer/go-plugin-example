@@ -8,8 +8,8 @@ import (
 
 // CheckMessageSidelineImpl is the interface that we're exposing as a plugin.
 type CheckMessageSidelineImpl interface {
-	CheckMessageSideline(key string) (bool, error)
-	SidelineMessage(KafkaSidelineMessage interface{}) error
+	CheckMessageSideline(key []byte) ([]byte, error)
+	SidelineMessage(msg []byte) error
 }
 
 // Here is an implementation that talks over RPC
@@ -17,28 +17,23 @@ type CheckMessageSidelineRPC struct {
 	Client *rpc.Client
 }
 
-func (g *CheckMessageSidelineRPC) CheckMessageSideline(key string) (bool, error) {
-	var resp bool
+func (g *CheckMessageSidelineRPC) CheckMessageSideline(key []byte) ([]byte, error) {
+	var resp []byte
 	fmt.Println("Checking from dmux plugin")
-	fmt.Println("Calling plugin ")
 	err := g.Client.Call("Plugin.CheckMessageSideline", key, &resp)
 	if err != nil {
-		// You usually want your interfaces to return errors. If they don't,
-		// there isn't much other choice here.
-		fmt.Println(err)
-		panic(err)
+		fmt.Println(err.Error())
+		return nil, err
 	}
-	fmt.Println("No error")
 	return resp, nil
 }
 
-func (g *CheckMessageSidelineRPC) SidelineMessage(kafkaSidelineMessage interface{}) error {
+func (g *CheckMessageSidelineRPC) SidelineMessage(msg []byte) error {
 	var resp bool
-	err := g.Client.Call("Plugin.SidelineMessage", kafkaSidelineMessage, &resp)
+	err := g.Client.Call("Plugin.SidelineMessage", msg, &resp)
 	if err != nil {
-		// You usually want your interfaces to return errors. If they don't,
-		// there isn't much other choice here.
-		panic(err)
+		fmt.Println(err.Error())
+		return err
 	}
 	return nil
 }
@@ -50,15 +45,15 @@ type CheckMessageSidelineRPCServer struct {
 	Impl CheckMessageSidelineImpl
 }
 
-func (s *CheckMessageSidelineRPCServer) CheckMessageSideline(key string, resp *bool) error {
+func (s *CheckMessageSidelineRPCServer) CheckMessageSideline(key []byte, resp *[]byte) error {
 	var err error
 	*resp, err = s.Impl.CheckMessageSideline(key)
 	return err
 }
 
-func (s *CheckMessageSidelineRPCServer) SidelineMessage(args interface{}, err *error) error {
+func (s *CheckMessageSidelineRPCServer) SidelineMessage(msg []byte, err *error) error {
 	//var err error
-	*err = s.Impl.SidelineMessage(args)
+	*err = s.Impl.SidelineMessage(msg)
 	return *err
 }
 
