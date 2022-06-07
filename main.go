@@ -125,8 +125,8 @@ func playWithSidelinePlugin() {
 	s1bytes, _ := json.Marshal(s1)
 	p.(plugin.CheckMessageSidelineImpl).CheckMessageSideline(s1bytes)
 	//log.Printf("\n%s: %s plugin gives me: %s\n", s.Type, "sideline-em", res)
-	p.(plugin.CheckMessageSidelineImpl).CheckMessageSideline(s1bytes)
-	p.(plugin.CheckMessageSidelineImpl).CheckMessageSideline(s1bytes)
+	//p.(plugin.CheckMessageSidelineImpl).CheckMessageSideline(s1bytes)
+	//p.(plugin.CheckMessageSidelineImpl).CheckMessageSideline(s1bytes)
 	p.(plugin.CheckMessageSidelineImpl).SidelineMessage(s1bytes)
 	/*for msg := range ch[0] {
 		log.Printf("\n%s: %s plugin gives me: %s\n", s.Type, "sideline-em", res)
