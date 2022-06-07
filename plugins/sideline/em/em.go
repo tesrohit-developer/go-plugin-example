@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/dkiser/go-plugin-example/plugin"
+	"github.fkinternal.com/tupili-easwar/sideline-em-models/models"
 	"io"
 	"io/ioutil"
 	"log"
@@ -17,6 +18,7 @@ import (
 	gplugin "github.com/hashicorp/go-plugin"
 	emclientmodels "github.fkinternal.com/Flipkart/entity-manager/modules/entity-manager-client-model/EntityManagerClientModel"
 	emmodels "github.fkinternal.com/Flipkart/entity-manager/modules/entity-manager-model/EntityManagerModel"
+	serde "github.fkinternal.com/Flipkart/entity-manager/modules/entity-manager-schema-registry-go-client"
 	"google.golang.org/protobuf/proto"
 )
 
@@ -135,6 +137,40 @@ func (SidelineEm) CheckMessageSideline(b []byte) ([]byte, error) {
 func (SidelineEm) SidelineMessage(msg []byte) error {
 	// do nothing
 	fmt.Println("Sidelining message in EM")
+	var message = models.SidelineMessage{
+		GroupId:           "G1",
+		Partition:         1,
+		Message:           nil,
+		Offset:            1,
+		ConsumerGroupName: "G1",
+		ClusterName:       "OMSDMUX",
+		EntityId:          "1",
+		Version:           1,
+	}
+	entityIdentifier := emmodels.EntityIdentifier{
+		Namespace: "com.dmux",
+		Name:      "SidelineMessage",
+	}
+	tenantIdentifier := emmodels.TenantIdentifier{
+		Name: "OMSDMUX",
+	}
+	upsertEntityRequest := emclientmodels.UpsertEntityRequest{
+		EntityIdentifier: &entityIdentifier,
+		TenantIdentifier: &tenantIdentifier,
+		Entity:           serde.Serialize(message.ProtoReflect()),
+		RequestMeta:      nil,
+	}
+	headers := make(map[string]string)
+	headers["Content-Type"] = "application/octet-stream"
+	headers["X-IDEMPOTENCY-ID"] = message.String()
+	headers["X-CLIENT-ID"] = "go-dmux"
+	headers["X-PERF-TTL"] = "LONG_PERF"
+	url := "http://10.24.19.136/entity-manager/v1/entity/upsert"
+	b, e := proto.Marshal(&upsertEntityRequest)
+	if e != nil {
+		return errors.New("error in ser UpsertEntityRequest")
+	}
+	execute("POST", url, headers, bytes.NewReader(b))
 	return nil
 }
 
